@@ -18,7 +18,7 @@ const CustomXAxisTick = ({ x, y, payload }: any) => {
     <g transform={`translate(${x},${y})`}>
       <text x={0} y={0} dy={16} textAnchor="middle" fill="#64748b" fontSize={9} fontWeight={600} fontFamily="Tajawal">
         {finalLines.map((line: string, index: number) => (
-          <tspan x={0} dy={index === 0 ? 0 : 11} key={index}>
+          <tspan x={0} dy={index === 0 ? 0 : 12} key={index}>
             {line}
           </tspan>
         ))}
@@ -225,7 +225,7 @@ function App() {
           <div className="space-y-8">
             {/* Top Level Stats / Chart */}
             {!selectedTrackId && (
-              <div className="bg-white p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+              <div className="bg-white p-4 md:p-6 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 relative overflow-hidden transition-all hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-80"></div>
                 
                 <div className="flex justify-between items-center mb-8 mt-2">
@@ -237,11 +237,12 @@ function App() {
                     </h3>
                 </div>
                 
-                <div className="h-80 w-full">
+                <div className="h-[300px] md:h-[400px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart 
                       data={performanceData} 
-                      margin={{ top: 20, right: 30, left: 20, bottom: isMobile ? 60 : 5 }}
+                      margin={{ top: 20, right: isMobile ? 5 : 30, left: isMobile ? -20 : 20, bottom: 0 }}
+                      barCategoryGap={isMobile ? '12%' : '20%'}
                     >
                       <defs>
                         <linearGradient id="colorHigh" x1="0" y1="0" x2="0" y2="1">
@@ -264,8 +265,8 @@ function App() {
                         tickLine={false} 
                         tick={isMobile ? <CustomXAxisTick /> : {fill: '#64748b', fontSize: 12, fontWeight: 600, fontFamily: 'Tajawal'}} 
                         interval={0} 
-                        dy={10}
-                        height={isMobile ? 70 : 30}
+                        dy={5}
+                        height={isMobile ? 55 : 40}
                       />
                       <YAxis 
                         axisLine={false} 
@@ -273,6 +274,7 @@ function App() {
                         tick={{fill: '#94a3b8', fontSize: 12}} 
                         domain={[0, 100]} 
                         dx={-10}
+                        width={isMobile ? 30 : 60}
                       />
                       <Tooltip 
                         cursor={{fill: 'rgba(99, 102, 241, 0.05)'}}
@@ -290,7 +292,7 @@ function App() {
                       <Bar 
                         dataKey="value" 
                         radius={[12, 12, 4, 4]} 
-                        barSize={isMobile ? 32 : 50} 
+                        maxBarSize={60}
                         animationDuration={1500}
                         animationBegin={200}
                         onClick={(data) => setSelectedTrackId(data.fullId)} 
