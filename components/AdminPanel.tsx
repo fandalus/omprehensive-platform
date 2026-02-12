@@ -17,7 +17,6 @@ interface AdminPanelProps {
 const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateLogo }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
-  const [showHint, setShowHint] = useState(true);
   
   // UI State
   const [editingTrackId, setEditingTrackId] = useState<string | null>(null);
@@ -232,20 +231,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
               <span>دخول</span>
             </button>
           </form>
-          
-          {showHint && (
-              <div className="animate-fade-in">
-                 <div className="border-2 border-dashed border-gray-300 rounded-lg py-3 px-4 text-xs font-semibold text-gray-400 mb-2 select-all bg-gray-50/50">
-                    (كلمة المرور التجريبية: admin123)
-                 </div>
-                 <button 
-                    onClick={() => setShowHint(false)}
-                    className="text-indigo-500 hover:text-indigo-700 text-xs font-medium transition-colors"
-                 >
-                    احذفها من الصفحة
-                 </button>
-              </div>
-          )}
         </div>
       </div>
     );
@@ -412,9 +397,17 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
                                     <td className="px-4 py-2 text-gray-500">{kpi.target} {kpi.unit}</td>
                                     <td className="px-4 py-2 text-gray-500">{kpi.actual} {kpi.unit}</td>
                                     <td className="px-4 py-2">
-                                        <span className={`font-bold ${kpi.achievementPercentage < 60 ? 'text-red-600' : kpi.achievementPercentage < 85 ? 'text-yellow-600' : 'text-emerald-600'}`}>
-                                            {kpi.achievementPercentage}%
-                                        </span>
+                                        <div className="flex flex-col items-end gap-1">
+                                            <span className={`font-bold ${kpi.achievementPercentage < 60 ? 'text-red-600' : kpi.achievementPercentage < 85 ? 'text-yellow-600' : 'text-emerald-600'}`}>
+                                                {kpi.achievementPercentage}%
+                                            </span>
+                                            <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full ${kpi.achievementPercentage < 60 ? 'bg-red-500' : kpi.achievementPercentage < 85 ? 'bg-yellow-500' : 'bg-emerald-500'}`} 
+                                                    style={{ width: `${Math.min(kpi.achievementPercentage, 100)}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
