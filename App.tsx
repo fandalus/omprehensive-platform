@@ -6,9 +6,38 @@ import { TrackData } from './types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
 import { LayoutDashboard, Users, PieChart, School, Settings, Clock, CalendarDays } from 'lucide-react';
 
+// Custom Tick Component for Mobile X-Axis
+const CustomXAxisTick = ({ x, y, payload }: any) => {
+  const text = payload.value;
+  // Split by " - " to wrap lines for specific track names
+  const lines = text.split(' - ');
+  // If text is long and no dash, split by space (fallback)
+  const finalLines = lines.length > 1 ? lines : text.split(' ');
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text x={0} y={0} dy={16} textAnchor="middle" fill="#64748b" fontSize={9} fontWeight={600} fontFamily="Tajawal">
+        {finalLines.map((line: string, index: number) => (
+          <tspan x={0} dy={index === 0 ? 0 : 11} key={index}>
+            {line}
+          </tspan>
+        ))}
+      </text>
+    </g>
+  );
+};
+
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Initialize data from localStorage or fallback to constants
   const [schoolData, setSchoolData] = useState<TrackData[]>(() => {
@@ -24,12 +53,13 @@ function App() {
     return [...SCHOOL_DATA, BRANCH_ADMIN_DATA];
   });
 
-  // Initialize Logo from localStorage
+  // Initialize Logo from localStorage with the new default
   const [appLogo, setAppLogo] = useState<string | null>(() => {
     try {
-      return localStorage.getItem('appLogo');
+      const saved = localStorage.getItem('appLogo');
+      return saved || "https://img.sanishtech.com/u/51c80a7dddbff72ffbaa8e5fc98d7f64.png";
     } catch (e) {
-      return null;
+      return "https://img.sanishtech.com/u/51c80a7dddbff72ffbaa8e5fc98d7f64.png";
     }
   });
 
@@ -194,7 +224,10 @@ function App() {
                 
                 <div className="h-80 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={performanceData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                    <BarChart 
+                      data={performanceData} 
+                      margin={{ top: 20, right: 30, left: 20, bottom: isMobile ? 60 : 5 }}
+                    >
                       <defs>
                         <linearGradient id="colorHigh" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="0%" stopColor="#10b981" stopOpacity={0.9}/>
@@ -214,9 +247,10 @@ function App() {
                         dataKey="name" 
                         axisLine={false} 
                         tickLine={false} 
-                        tick={{fill: '#64748b', fontSize: 12, fontWeight: 600, fontFamily: 'Tajawal'}} 
+                        tick={isMobile ? <CustomXAxisTick /> : {fill: '#64748b', fontSize: 12, fontWeight: 600, fontFamily: 'Tajawal'}} 
                         interval={0} 
                         dy={10}
+                        height={isMobile ? 70 : 30}
                       />
                       <YAxis 
                         axisLine={false} 
@@ -241,7 +275,7 @@ function App() {
                       <Bar 
                         dataKey="value" 
                         radius={[12, 12, 4, 4]} 
-                        barSize={50} 
+                        barSize={isMobile ? 32 : 50} 
                         animationDuration={1500}
                         animationBegin={200}
                         onClick={(data) => setSelectedTrackId(data.fullId)} 
