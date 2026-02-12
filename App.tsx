@@ -57,7 +57,11 @@ function App() {
   const [appLogo, setAppLogo] = useState<string | null>(() => {
     try {
       const saved = localStorage.getItem('appLogo');
-      return saved || "https://img.sanishtech.com/u/51c80a7dddbff72ffbaa8e5fc98d7f64.png";
+      // Ensure we don't return "null" string or empty string if it was saved incorrectly
+      if (saved && saved !== "null" && saved !== "undefined") {
+        return saved;
+      }
+      return "https://img.sanishtech.com/u/51c80a7dddbff72ffbaa8e5fc98d7f64.png";
     } catch (e) {
       return "https://img.sanishtech.com/u/51c80a7dddbff72ffbaa8e5fc98d7f64.png";
     }
@@ -141,13 +145,24 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-lg flex items-center justify-center shadow-md overflow-hidden ${appLogo ? 'bg-white' : 'bg-indigo-600 text-white'}`}>
-                {appLogo ? (
-                  <img src={appLogo} alt="شعار المدرسة" className="w-full h-full object-contain" />
-                ) : (
-                  <School className="w-6 h-6" />
-                )}
-              </div>
+              {/* Logo Section - Modified to support wider/larger logos */}
+              {appLogo ? (
+                <div className="h-12 w-auto flex items-center">
+                    <img 
+                        src={appLogo} 
+                        alt="شعار المدرسة" 
+                        className="h-full w-auto object-contain" 
+                        onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                        }}
+                    />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shadow-md overflow-hidden bg-indigo-600 text-white">
+                    <School className="w-6 h-6" />
+                </div>
+              )}
+              
               <div>
                 <h1 className="text-xl font-bold text-gray-900">مدارس الأندلس</h1>
                 <p className="text-xs text-gray-500">لوحة معلومات الأداء - فرع المنار</p>
