@@ -221,7 +221,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="......."
               className="w-full px-6 py-4 rounded-xl bg-[#333] text-white placeholder-gray-500 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all text-center tracking-widest text-lg shadow-inner"
             />
             <button
@@ -235,12 +235,12 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
           
           {showHint && (
               <div className="animate-fade-in">
-                 <div className="border-2 border-dashed border-indigo-200 rounded-lg py-3 px-4 text-xs font-semibold text-gray-400 mb-2 select-all">
+                 <div className="border-2 border-dashed border-gray-300 rounded-lg py-3 px-4 text-xs font-semibold text-gray-400 mb-2 select-all bg-gray-50/50">
                     (كلمة المرور التجريبية: admin123)
                  </div>
                  <button 
                     onClick={() => setShowHint(false)}
-                    className="text-indigo-400 hover:text-indigo-600 text-xs font-medium transition-colors"
+                    className="text-indigo-500 hover:text-indigo-700 text-xs font-medium transition-colors"
                  >
                     احذفها من الصفحة
                  </button>

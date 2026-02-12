@@ -4,7 +4,7 @@ import KpiCard from './components/KpiCard';
 import AdminPanel from './components/AdminPanel';
 import { TrackData } from './types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
-import { LayoutDashboard, Users, PieChart, School, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, PieChart, School, Settings, Clock, CalendarDays } from 'lucide-react';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -33,17 +33,48 @@ function App() {
     }
   });
 
+  // Initialize Last Updated Date
+  const [lastUpdated, setLastUpdated] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('lastUpdated');
+      // Return saved date or current date formatted in Arabic
+      return saved || new Date().toLocaleDateString('ar-SA', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+    } catch (e) {
+      return new Date().toLocaleDateString('ar-SA');
+    }
+  });
+
   // Save to localStorage whenever data changes
   useEffect(() => {
     localStorage.setItem('andalusSchoolData', JSON.stringify(schoolData));
   }, [schoolData]);
 
+  // Helper to update the timestamp
+  const refreshLastUpdated = () => {
+    const now = new Date();
+    const dateStr = now.toLocaleString('ar-SA', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    setLastUpdated(dateStr);
+    localStorage.setItem('lastUpdated', dateStr);
+  };
+
   const handleUpdateData = (newData: TrackData[]) => {
     setSchoolData(newData);
+    refreshLastUpdated();
   };
 
   const handleUpdateLogo = (newLogo: string | null) => {
     setAppLogo(newLogo);
+    refreshLastUpdated();
     try {
       if (newLogo) {
         localStorage.setItem('appLogo', newLogo);
@@ -117,15 +148,25 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* Header Section */}
-        <div className="mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                {activeTab === 'admin' ? 'لوحة تحكم المشرف' : selectedTrackId ? currentTrack?.name : 'لوحة القيادة الرئيسية'}
-            </h2>
-            <p className="text-gray-500 max-w-3xl">
-                {activeTab === 'admin'
-                  ? 'تحديث البيانات والمؤشرات، وتخصيص هوية التطبيق.'
-                  : 'نؤمن أن التعلم ثقافة تطورنا ونضمن بها استمرارية نجاحنا.'}
-            </p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                    {activeTab === 'admin' ? 'لوحة تحكم المشرف' : selectedTrackId ? currentTrack?.name : 'لوحة القيادة الرئيسية'}
+                </h2>
+                <p className="text-gray-500 max-w-3xl">
+                    {activeTab === 'admin'
+                      ? 'تحديث البيانات والمؤشرات، وتخصيص هوية التطبيق.'
+                      : 'نؤمن أن التعلم ثقافة تطورنا ونضمن بها استمرارية نجاحنا.'}
+                </p>
+            </div>
+            
+            {/* Last Updated Badge - Visible mainly on Dashboard */}
+            {activeTab === 'dashboard' && !selectedTrackId && (
+                <div className="flex items-center gap-2 text-sm text-gray-500 bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 animate-fade-in">
+                    <CalendarDays className="w-4 h-4 text-indigo-500" />
+                    <span>آخر تحديث: <span className="font-semibold text-gray-700">{lastUpdated}</span></span>
+                </div>
+            )}
         </div>
 
         {activeTab === 'admin' ? (
@@ -239,7 +280,6 @@ function App() {
                    // Alternate colored strip position: Right for even (Start in RTL), Left for odd (End in RTL)
                    // Assuming 2-column grid in standard flow
                    const isEven = index % 2 === 0;
-                   const statusColor = track.overallPerformance < 60 ? 'red' : track.overallPerformance < 85 ? 'yellow' : 'emerald';
                    const statusColorClass = track.overallPerformance < 60 ? 'bg-red-500' : track.overallPerformance < 85 ? 'bg-yellow-500' : 'bg-emerald-500';
                    const statusTextClass = track.overallPerformance < 60 ? 'text-red-600' : track.overallPerformance < 85 ? 'text-yellow-600' : 'text-emerald-600';
                    const statusBgSoft = track.overallPerformance < 60 ? 'bg-red-50 text-red-600' : track.overallPerformance < 85 ? 'bg-yellow-50 text-yellow-600' : 'bg-emerald-50 text-emerald-600';
