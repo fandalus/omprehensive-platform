@@ -14,6 +14,7 @@ export interface TrackData {
   name: string;
   overallPerformance: number;
   kpis: KPI[];
+  manager?: string; // Added manager field
 }
 
 export interface AnalysisResponse {

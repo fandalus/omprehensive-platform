@@ -4,7 +4,7 @@ import KpiCard from './components/KpiCard';
 import AdminPanel from './components/AdminPanel';
 import { TrackData } from './types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
-import { LayoutDashboard, Users, PieChart, School, Settings, Clock, CalendarDays } from 'lucide-react';
+import { LayoutDashboard, Users, PieChart, School, Settings, Clock, CalendarDays, UserCircle } from 'lucide-react';
 
 // Custom Tick Component for Mobile X-Axis
 const CustomXAxisTick = ({ x, y, payload }: any) => {
@@ -356,9 +356,23 @@ function App() {
                          </div>
                        </div>
                        
-                       <div className="w-full text-right mt-auto">
-                         <h3 className="font-bold text-gray-900 text-xl group-hover:text-indigo-600 transition-colors">{track.name}</h3>
-                         <p className="text-sm text-gray-400 mt-1">نسبة التحقق من المستهدفات</p>
+                       <div className="w-full mt-auto">
+                         <h3 className="font-bold text-gray-900 text-xl text-right group-hover:text-indigo-600 transition-colors mb-3">{track.name}</h3>
+                         
+                         <div className="flex justify-between items-center w-full">
+                             {/* Manager on Right (First item in RTL) */}
+                             <div className="flex items-center gap-1.5 text-sm text-gray-500 group-hover:text-gray-700 transition-colors min-h-[24px]">
+                                 {track.manager && (
+                                     <>
+                                         <UserCircle className="w-4 h-4 text-gray-400" />
+                                         <span className="font-medium">{track.manager}</span>
+                                     </>
+                                 )}
+                             </div>
+
+                             {/* Label on Left (Second item in RTL) */}
+                             <p className="text-xs text-gray-400">نسبة التحقق من المستهدفات</p>
+                         </div>
                        </div>
                      </button>
                    );

@@ -5,6 +5,7 @@ export const SCHOOL_DATA: TrackData[] = [
   {
     id: 'national-boys',
     name: 'المسار الأهلي - بنين',
+    manager: 'عبداللطيف مدخلي',
     overallPerformance: 85.76,
     kpis: [
       { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 82, achievementPercentage: 100, unit: '%', responsible: 'عبد الحميد جابو' },
@@ -19,6 +20,7 @@ export const SCHOOL_DATA: TrackData[] = [
   {
     id: 'kg',
     name: 'رياض الأطفال',
+    manager: 'شذى الظاهري',
     overallPerformance: 75.69,
     kpis: [
       { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 80, achievementPercentage: 100, unit: '%', responsible: 'عبد الحميد جابو' },
@@ -32,6 +34,7 @@ export const SCHOOL_DATA: TrackData[] = [
   {
     id: 'national-girls',
     name: 'المسار الأهلي - بنات',
+    manager: 'شذى الظاهري',
     overallPerformance: 78.73,
     kpis: [
       { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 83, achievementPercentage: 100, unit: '%', responsible: 'عبد الحميد جابو' },
@@ -45,6 +48,7 @@ export const SCHOOL_DATA: TrackData[] = [
   {
     id: 'intl-boys',
     name: 'المسار العالمي - بنين',
+    manager: 'عبداللطيف مدخلي',
     overallPerformance: 82.80,
     kpis: [
       { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 63, achievementPercentage: 100, unit: '%', responsible: 'عبد الحميد جابو' },
@@ -59,6 +63,7 @@ export const SCHOOL_DATA: TrackData[] = [
   {
     id: 'intl-girls',
     name: 'المسار العالمي - بنات',
+    manager: 'شذى الظاهري',
     overallPerformance: 58.61, // Lowest
     kpis: [
       { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 75, achievementPercentage: 50, unit: '%', responsible: 'عبد الحميد جابو' }, // Data inconsistency in source, utilizing achievement %
@@ -72,9 +77,10 @@ export const SCHOOL_DATA: TrackData[] = [
   }
 ];
 
-export const BRANCH_ADMIN_DATA = {
+export const BRANCH_ADMIN_DATA: TrackData = {
     id: 'branch-admin',
     name: 'إدارة الفرع',
+    manager: 'سارة السلمي',
     overallPerformance: 82.75,
     kpis: [
         { id: 'students', name: 'أعداد الطلاب', target: 777, actual: 1827, achievementPercentage: 100, unit: '#', responsible: 'منصور الروقي' },
