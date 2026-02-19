@@ -42,7 +42,7 @@ function App() {
   // Initialize data from localStorage or fallback to constants
   const [schoolData, setSchoolData] = useState<TrackData[]>(() => {
     try {
-      const saved = localStorage.getItem('andalusSchoolData');
+      const saved = localStorage.getItem('andalusSchoolData_v3');
       if (saved) {
         return JSON.parse(saved);
       }
@@ -71,31 +71,25 @@ function App() {
   const [lastUpdated, setLastUpdated] = useState<string>(() => {
     try {
       const saved = localStorage.getItem('lastUpdated');
-      // Return saved date or current date formatted in Arabic
-      return saved || new Date().toLocaleDateString('ar-SA', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-      });
+      // Return saved date or default static date
+      return saved || '18 فبراير 2026';
     } catch (e) {
-      return new Date().toLocaleDateString('ar-SA');
+      return '18 فبراير 2026';
     }
   });
 
   // Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem('andalusSchoolData', JSON.stringify(schoolData));
+    localStorage.setItem('andalusSchoolData_v3', JSON.stringify(schoolData));
   }, [schoolData]);
 
   // Helper to update the timestamp
   const refreshLastUpdated = () => {
     const now = new Date();
-    const dateStr = now.toLocaleString('ar-SA', { 
+    const dateStr = now.toLocaleDateString('ar-SA', { 
       year: 'numeric', 
       month: 'long', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      day: 'numeric'
     });
     setLastUpdated(dateStr);
     localStorage.setItem('lastUpdated', dateStr);

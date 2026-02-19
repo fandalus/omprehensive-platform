@@ -15,6 +15,7 @@ export const SCHOOL_DATA: TrackData[] = [
       { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
       { id: 'awards', name: 'المراكز التنافسية', target: 10, actual: 15, achievementPercentage: 100, unit: '#', responsible: 'محمد مصطفى' },
       { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 70, achievementPercentage: 99, unit: '%', responsible: 'سارة السلمي' },
+      { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 99800, actual: 18737, achievementPercentage: 19, unit: '$', responsible: '' },
     ]
   },
   {
@@ -29,6 +30,7 @@ export const SCHOOL_DATA: TrackData[] = [
       { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 90, achievementPercentage: 100, unit: '%', responsible: 'رعود اللحياني' },
       { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
       { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 64, achievementPercentage: 91, unit: '%', responsible: 'سارة السلمي' },
+      { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 258200, actual: 21668, achievementPercentage: 8, unit: '$', responsible: '' },
     ]
   },
   {
@@ -43,6 +45,7 @@ export const SCHOOL_DATA: TrackData[] = [
       { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 89, achievementPercentage: 99, unit: '%', responsible: 'رعود اللحياني' },
       { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
       { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 44, achievementPercentage: 63, unit: '%', responsible: 'سارة السلمي' }, // Low
+      { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 258200, actual: 21668, achievementPercentage: 8, unit: '$', responsible: '' },
     ]
   },
   {
@@ -58,6 +61,7 @@ export const SCHOOL_DATA: TrackData[] = [
       { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
       { id: 'awards', name: 'المراكز التنافسية', target: 5, actual: 11, achievementPercentage: 100, unit: '#', responsible: 'محمد مصطفى' },
       { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 96, achievementPercentage: 100, unit: '%', responsible: 'سارة السلمي' },
+      { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 99800, actual: 18737, achievementPercentage: 19, unit: '$', responsible: '' },
     ]
   },
   {
@@ -73,6 +77,7 @@ export const SCHOOL_DATA: TrackData[] = [
       { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
       { id: 'awards', name: 'المراكز التنافسية', target: 5, actual: 0, achievementPercentage: 0, unit: '#', responsible: 'محمد مصطفى' }, // Critical
       { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 55, achievementPercentage: 78, unit: '%', responsible: 'سارة السلمي' },
+      { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 258200, actual: 21668, achievementPercentage: 8, unit: '$', responsible: '' },
     ]
   }
 ];
