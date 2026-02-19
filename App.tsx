@@ -32,6 +32,39 @@ function App() {
   const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
+  // Handle Browser Back Button / Hash Navigation
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#track-')) {
+        const id = hash.replace('#track-', '');
+        setSelectedTrackId(id);
+        setActiveTab('dashboard'); // Ensure we show the dashboard view
+      } else {
+        setSelectedTrackId(null);
+      }
+    };
+
+    // Initial check on mount
+    handleHashChange();
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigateToTrack = (id: string) => {
+    window.location.hash = `track-${id}`;
+  };
+
+  const clearTrackSelection = () => {
+    // If there is a hash, clear it (this adds to history, allowing forward/back)
+    if (window.location.hash) {
+        window.location.hash = '';
+    } else {
+        setSelectedTrackId(null);
+    }
+  };
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -42,7 +75,7 @@ function App() {
   // Initialize data from localStorage or fallback to constants
   const [schoolData, setSchoolData] = useState<TrackData[]>(() => {
     try {
-      const saved = localStorage.getItem('andalusSchoolData_v3');
+      const saved = localStorage.getItem('andalusSchoolData_v4');
       if (saved) {
         return JSON.parse(saved);
       }
@@ -80,7 +113,7 @@ function App() {
 
   // Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem('andalusSchoolData_v3', JSON.stringify(schoolData));
+    localStorage.setItem('andalusSchoolData_v4', JSON.stringify(schoolData));
   }, [schoolData]);
 
   // Helper to update the timestamp
@@ -166,7 +199,7 @@ function App() {
             {/* Desktop Tabs */}
             <div className="hidden md:flex items-center gap-4">
                <button 
-                onClick={() => { setActiveTab('dashboard'); setSelectedTrackId(null); }}
+                onClick={() => { setActiveTab('dashboard'); clearTrackSelection(); }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'dashboard' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:text-gray-900'}`}
                >
                  نظرة عامة
@@ -289,7 +322,7 @@ function App() {
                         maxBarSize={60}
                         animationDuration={1500}
                         animationBegin={200}
-                        onClick={(data) => setSelectedTrackId(data.fullId)} 
+                        onClick={(data) => navigateToTrack(data.fullId)} 
                         className="cursor-pointer filter hover:brightness-105 transition-all"
                       >
                         {performanceData.map((entry, index) => (
@@ -332,7 +365,7 @@ function App() {
                    return (
                      <button
                        key={track.id}
-                       onClick={() => setSelectedTrackId(track.id)}
+                       onClick={() => navigateToTrack(track.id)}
                        className="relative bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300 group overflow-hidden flex flex-col justify-between min-h-[160px]"
                      >
                        {/* Colored Strip */}
@@ -378,7 +411,7 @@ function App() {
             {selectedTrackId && currentTrack && (
               <div className="animate-fade-in-up">
                 <button 
-                  onClick={() => setSelectedTrackId(null)}
+                  onClick={() => clearTrackSelection()}
                   className="mb-6 px-4 py-2 bg-white hover:bg-gray-50 text-indigo-600 hover:text-indigo-700 font-bold rounded-xl shadow-sm border border-gray-200 flex items-center gap-2 transition-all"
                 >
                   <span>←</span>
@@ -400,7 +433,7 @@ function App() {
       <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 pb-safe z-50">
           <div className="flex justify-around p-3">
               <button 
-                onClick={() => { setActiveTab('dashboard'); setSelectedTrackId(null); }}
+                onClick={() => { setActiveTab('dashboard'); clearTrackSelection(); }}
                 className={`flex flex-col items-center gap-1 ${activeTab === 'dashboard' ? 'text-indigo-600' : 'text-gray-400'}`}
               >
                   <LayoutDashboard className="w-6 h-6" />
