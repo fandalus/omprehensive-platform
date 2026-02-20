@@ -3,7 +3,7 @@ import { SCHOOL_DATA, BRANCH_ADMIN_DATA } from './constants';
 import KpiCard from './components/KpiCard';
 import AdminPanel from './components/AdminPanel';
 import { TrackData } from './types';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid, LabelList } from 'recharts';
 import { LayoutDashboard, Users, PieChart, School, Settings, Clock, CalendarDays, UserCircle } from 'lucide-react';
 
 // Custom Tick Component for Mobile X-Axis
@@ -28,12 +28,18 @@ const CustomXAxisTick = ({ x, y, payload }: any) => {
 };
 
 function App() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'admin'>('dashboard');
   const [selectedTrackId, setSelectedTrackId] = useState<string | null>(null);
+
   const [isMobile, setIsMobile] = useState(false);
 
   // Handle Browser Back Button / Hash Navigation
   useEffect(() => {
+    // On refresh/mount, clear any existing hash to ensure we return to the main dashboard
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash.startsWith('#track-')) {
@@ -45,7 +51,7 @@ function App() {
       }
     };
 
-    // Initial check on mount
+    // Initial check on mount (after clearing hash if needed)
     handleHashChange();
 
     window.addEventListener('hashchange', handleHashChange);
@@ -218,13 +224,7 @@ function App() {
 
             {/* Mobile Admin Button - Discreet */}
             <div className="md:hidden flex items-center">
-               <button 
-                 onClick={() => setActiveTab('admin')}
-                 className={`p-2 transition-colors ${activeTab === 'admin' ? 'text-indigo-600' : 'text-gray-200 hover:text-gray-400'}`}
-                 aria-label="Admin"
-               >
-                 <Settings className="w-5 h-5" />
-               </button>
+               {/* Removed from navbar to keep it discreet and match screenshot placement */}
             </div>
           </div>
         </div>
@@ -234,26 +234,31 @@ function App() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         {/* Header Section */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                    {activeTab === 'admin' ? 'لوحة تحكم المشرف' : selectedTrackId ? currentTrack?.name : 'لوحة القيادة الرئيسية'}
-                </h2>
-                <p className="text-gray-500 max-w-3xl">
-                    {activeTab === 'admin'
-                      ? 'تحديث البيانات والمؤشرات، وتخصيص هوية التطبيق.'
-                      : 'نؤمن أن التعلم ثقافة تطورنا ونضمن بها استمرارية نجاحنا.'}
-                </p>
-            </div>
-            
-            {/* Last Updated Badge - Visible mainly on Dashboard */}
-            {activeTab === 'dashboard' && !selectedTrackId && (
-                <div className="flex items-center gap-2 text-sm text-gray-500 bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100 animate-fade-in">
-                    <CalendarDays className="w-4 h-4 text-indigo-500" />
-                    <span>آخر تحديث: <span className="font-semibold text-gray-700">{lastUpdated}</span></span>
-                </div>
-            )}
+        <div className="mb-12 text-center">
+            <h2 className="text-4xl font-extrabold text-gray-900 mb-4 tracking-tight">
+                {activeTab === 'admin' ? 'لوحة تحكم المشرف' : selectedTrackId ? currentTrack?.name : 'لوحة القيادة الرئيسية'}
+            </h2>
+            <p className="text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
+                {activeTab === 'admin'
+                  ? 'تحديث البيانات والمؤشرات، وتخصيص هوية التطبيق.'
+                  : 'نؤمن أن التعلم ثقافة تطورنا ونضمن بها استمرارية نجاحنا.'}
+            </p>
         </div>
+
+        {activeTab === 'dashboard' && !selectedTrackId && (
+            <div className="mb-8 text-center relative">
+                <div className="md:hidden absolute left-0 top-1/2 -translate-y-1/2">
+                    <button 
+                        onClick={() => setActiveTab('admin')}
+                        className="p-2 text-gray-300 hover:text-gray-400"
+                    >
+                        <Settings className="w-5 h-5" />
+                    </button>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800">مدارس الأندلس</h3>
+                <p className="text-sm text-gray-400">لوحة معلومات الأداء - فرع المنار</p>
+            </div>
+        )}
 
         {activeTab === 'admin' ? (
           <AdminPanel 
@@ -282,7 +287,7 @@ function App() {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart 
                       data={performanceData} 
-                      margin={{ top: 20, right: isMobile ? 5 : 30, left: isMobile ? -20 : 20, bottom: 0 }}
+                      margin={{ top: 20, right: isMobile ? 10 : 30, left: isMobile ? 0 : 20, bottom: 0 }}
                       barCategoryGap={isMobile ? '12%' : '20%'}
                     >
                       <defs>
@@ -314,8 +319,8 @@ function App() {
                         tickLine={false} 
                         tick={{fill: '#94a3b8', fontSize: 12}} 
                         domain={[0, 100]} 
-                        dx={-10}
-                        width={isMobile ? 30 : 60}
+                        dx={isMobile ? -5 : -10}
+                        width={isMobile ? 40 : 60}
                       />
                       <Tooltip 
                         cursor={{fill: 'rgba(99, 102, 241, 0.05)'}}
@@ -342,6 +347,13 @@ function App() {
                         {performanceData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={getBarGradient(entry.value)} strokeWidth={0} />
                         ))}
+                        <LabelList 
+                          dataKey="value" 
+                          position="top" 
+                          formatter={(val: number) => `${val}%`}
+                          style={{ fill: '#475569', fontSize: 12, fontWeight: 700, fontFamily: 'Tajawal' }}
+                          offset={10}
+                        />
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
