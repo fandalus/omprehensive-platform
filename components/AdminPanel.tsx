@@ -4,7 +4,8 @@ import * as XLSX from 'xlsx';
 import { 
   Save, Plus, Trash2, Edit2, Lock, X, LogIn, 
   Search, SortAsc, SortDesc, FileSpreadsheet, Printer, 
-  CheckCircle2, AlertTriangle, FileText, Upload, Image as ImageIcon
+  CheckCircle2, AlertTriangle, FileText, Upload, Image as ImageIcon,
+  Eye, EyeOff
 } from 'lucide-react';
 
 interface AdminPanelProps {
@@ -78,7 +79,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
       XLSX.utils.book_append_sheet(wb, summaryWs, "ملخص المسارات");
 
       // Sheet 2: Detailed KPIs
-      const detailsData = data.flatMap(t => t.kpis.map(k => ({
+      const detailsData = data.flatMap(t => t.kpis.filter(k => !k.hidden).map(k => ({
         "المسار": t.name,
         "المؤشر": k.name,
         "المستهدف": k.target,
@@ -391,8 +392,11 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
                         </thead>
                         <tbody className="divide-y divide-gray-100">
                             {track.kpis.map(kpi => (
-                                <tr key={kpi.id}>
-                                    <td className="px-4 py-2 font-medium text-gray-800">{kpi.name}</td>
+                                <tr key={kpi.id} className={kpi.hidden ? 'opacity-50 bg-gray-50' : ''}>
+                                    <td className="px-4 py-2 font-medium text-gray-800">
+                                        {kpi.name}
+                                        {kpi.hidden && <span className="mr-2 text-[10px] bg-gray-200 text-gray-500 px-1.5 py-0.5 rounded">مخفي</span>}
+                                    </td>
                                     <td className="px-4 py-2 text-gray-500">{kpi.responsible || '-'}</td>
                                     <td className="px-4 py-2 text-gray-500">{kpi.target} {kpi.unit}</td>
                                     <td className="px-4 py-2 text-gray-500">{kpi.actual} {kpi.unit}</td>
@@ -470,6 +474,16 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
                         </button>
                         
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+                          <div className="md:col-span-1">
+                             <label className="text-xs text-gray-500 block mb-1">عرض</label>
+                             <button
+                               onClick={() => updateKpi(kpi.id, 'hidden', !kpi.hidden)}
+                               className={`w-full p-1.5 flex items-center justify-center rounded border transition-colors ${kpi.hidden ? 'bg-gray-100 text-gray-400 border-gray-200' : 'bg-indigo-50 text-indigo-600 border-indigo-100'}`}
+                               title={kpi.hidden ? 'إظهار المؤشر' : 'إخفاء المؤشر'}
+                             >
+                               {kpi.hidden ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                             </button>
+                          </div>
                           <div className="md:col-span-3">
                             <label className="text-xs text-gray-500 block mb-1">اسم المؤشر</label>
                             <input

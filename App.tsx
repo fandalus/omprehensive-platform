@@ -75,7 +75,7 @@ function App() {
   // Initialize data from localStorage or fallback to constants
   const [schoolData, setSchoolData] = useState<TrackData[]>(() => {
     try {
-      const saved = localStorage.getItem('andalusSchoolData_v4');
+      const saved = localStorage.getItem('andalusSchoolData_v6');
       if (saved) {
         return JSON.parse(saved);
       }
@@ -113,7 +113,7 @@ function App() {
 
   // Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem('andalusSchoolData_v4', JSON.stringify(schoolData));
+    localStorage.setItem('andalusSchoolData_v6', JSON.stringify(schoolData));
   }, [schoolData]);
 
   // Helper to update the timestamp
@@ -419,7 +419,7 @@ function App() {
                 </button>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {currentTrack.kpis.map((kpi) => (
+                  {currentTrack.kpis.filter(kpi => !kpi.hidden).map((kpi) => (
                     <KpiCard key={kpi.id} kpi={kpi} />
                   ))}
                 </div>

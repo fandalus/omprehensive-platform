@@ -7,6 +7,7 @@ export interface KPI {
   unit: '%' | '#' | '$';
   isReverse?: boolean; // If lower is better (not used extensively here but good for type safety)
   responsible?: string;
+  hidden?: boolean;
 }
 
 export interface TrackData {
