@@ -246,8 +246,8 @@ function App() {
         </div>
 
         {activeTab === 'dashboard' && !selectedTrackId && (
-            <div className="mb-8 text-center relative">
-                <div className="md:hidden absolute left-0 top-1/2 -translate-y-1/2">
+            <div className="mb-8 relative">
+                <div className="md:hidden absolute left-0 top-0">
                     <button 
                         onClick={() => setActiveTab('admin')}
                         className="p-2 text-gray-300 hover:text-gray-400"
@@ -255,8 +255,6 @@ function App() {
                         <Settings className="w-5 h-5" />
                     </button>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-800">مدارس الأندلس</h3>
-                <p className="text-sm text-gray-400">لوحة معلومات الأداء - فرع المنار</p>
             </div>
         )}
 
@@ -283,12 +281,14 @@ function App() {
                     </h3>
                 </div>
                 
-                <div className="h-[300px] md:h-[400px] w-full">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="h-[300px] md:h-[400px] w-full outline-none">
+                  <ResponsiveContainer width="100%" height="100%" tabIndex={-1}>
                     <BarChart 
                       data={performanceData} 
                       margin={{ top: 20, right: isMobile ? 10 : 30, left: isMobile ? 0 : 20, bottom: 0 }}
                       barCategoryGap={isMobile ? '12%' : '20%'}
+                      className="outline-none"
+                      tabIndex={-1}
                     >
                       <defs>
                         <linearGradient id="colorHigh" x1="0" y1="0" x2="0" y2="1">
@@ -342,7 +342,7 @@ function App() {
                         animationDuration={1500}
                         animationBegin={200}
                         onClick={(data) => navigateToTrack(data.fullId)} 
-                        className="cursor-pointer filter hover:brightness-105 transition-all"
+                        className="cursor-pointer filter hover:brightness-105 transition-all outline-none"
                       >
                         {performanceData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={getBarGradient(entry.value)} strokeWidth={0} />
