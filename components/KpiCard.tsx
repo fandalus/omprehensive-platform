@@ -69,7 +69,13 @@ const KpiCard: React.FC<KpiCardProps> = ({ kpi }) => {
         <div className="mt-3 pt-2 border-t border-gray-200/50 flex items-center gap-1.5 text-xs text-gray-500">
           <UserCircle2 className="w-3.5 h-3.5 opacity-60" />
           <span className="opacity-70">المسؤول:</span>
-          <span className="font-semibold text-gray-700">{kpi.responsible}</span>
+          {kpi.responsibleEmail ? (
+            <a href={`mailto:${kpi.responsibleEmail}`} className="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline transition-colors">
+              {kpi.responsible}
+            </a>
+          ) : (
+            <span className="font-semibold text-gray-700">{kpi.responsible}</span>
+          )}
         </div>
       )}
     </div>
