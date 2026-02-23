@@ -243,6 +243,12 @@ function App() {
                   ? 'تحديث البيانات والمؤشرات، وتخصيص هوية التطبيق.'
                   : 'نؤمن أن التعلم ثقافة تطورنا ونضمن بها استمرارية نجاحنا.'}
             </p>
+            
+            {/* Last Updated Label */}
+            <div className="mt-6 flex items-center justify-center gap-2 text-sm text-gray-400 font-medium">
+              <Clock className="w-4 h-4" />
+              <span>آخر تحديث: {lastUpdated}</span>
+            </div>
         </div>
 
         {activeTab === 'dashboard' && !selectedTrackId && (
