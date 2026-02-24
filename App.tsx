@@ -81,7 +81,7 @@ function App() {
   // Initialize data from localStorage or fallback to constants
   const [schoolData, setSchoolData] = useState<TrackData[]>(() => {
     try {
-      const saved = localStorage.getItem('andalusSchoolData_v6');
+      const saved = localStorage.getItem('andalusSchoolData_v7');
       if (saved) {
         return JSON.parse(saved);
       }
@@ -111,15 +111,15 @@ function App() {
     try {
       const saved = localStorage.getItem('lastUpdated');
       // Return saved date or default static date
-      return saved || '18 فبراير 2026';
+      return saved || '24 فبراير 2026';
     } catch (e) {
-      return '18 فبراير 2026';
+      return '24 فبراير 2026';
     }
   });
 
   // Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem('andalusSchoolData_v6', JSON.stringify(schoolData));
+    localStorage.setItem('andalusSchoolData_v7', JSON.stringify(schoolData));
   }, [schoolData]);
 
   // Helper to update the timestamp
