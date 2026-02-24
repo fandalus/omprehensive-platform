@@ -8,7 +8,7 @@ export const SCHOOL_DATA: TrackData[] = [
     manager: 'عبداللطيف مدخلي',
     overallPerformance: 85.76,
     kpis: [
-      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 82, achievementPercentage: 100, unit: '%', responsible: 'رشيد العوادي' },
+      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 82, achievementPercentage: 100, unit: '%', responsible: 'رشيد العلواني' },
       { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 6.42, achievementPercentage: 100, unit: '#', responsible: 'عبد العزيز أبو عالي' },
       { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'عبد العزيز أبو عالي' },
       { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 88, achievementPercentage: 98, unit: '%', responsible: 'محمد هزازي' },
@@ -54,7 +54,7 @@ export const SCHOOL_DATA: TrackData[] = [
     manager: 'عبداللطيف مدخلي',
     overallPerformance: 82.80,
     kpis: [
-      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 63, achievementPercentage: 100, unit: '%', responsible: 'رشيد العوادي' },
+      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 63, achievementPercentage: 100, unit: '%', responsible: 'رشيد العلواني' },
       { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 3.98, achievementPercentage: 80, unit: '#', responsible: 'عبد العزيز أبو عالي' },
       { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'عبد العزيز أبو عالي' },
       { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 84, achievementPercentage: 94, unit: '%', responsible: 'محمد هزازي' },
