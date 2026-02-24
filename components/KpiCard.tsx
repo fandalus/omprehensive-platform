@@ -11,71 +11,66 @@ const KpiCard: React.FC<KpiCardProps> = ({ kpi }) => {
   const isWarning = kpi.achievementPercentage >= 60 && kpi.achievementPercentage < 85;
   const isGood = kpi.achievementPercentage >= 85;
 
-  let bgColor = "bg-white";
-  let borderColor = "border-gray-200";
-  let textColor = "text-gray-700";
-  let Icon = TrendingUp;
+  let statusColor = "bg-emerald-500";
+  let statusBg = "bg-emerald-50";
+  let textColor = "text-emerald-600";
+  let Icon = CheckCircle2;
 
   if (isCritical) {
-    borderColor = "border-red-200";
-    bgColor = "bg-red-50";
-    textColor = "text-red-700";
+    statusColor = "bg-red-500";
+    statusBg = "bg-red-50";
+    textColor = "text-red-600";
     Icon = AlertCircle;
   } else if (isWarning) {
-    borderColor = "border-yellow-200";
-    bgColor = "bg-yellow-50";
-    textColor = "text-yellow-700";
+    statusColor = "bg-yellow-500";
+    statusBg = "bg-yellow-50";
+    textColor = "text-yellow-600";
     Icon = TrendingDown;
-  } else {
-    borderColor = "border-emerald-200";
-    bgColor = "bg-emerald-50";
-    textColor = "text-emerald-700";
-    Icon = CheckCircle2;
   }
 
   return (
-    <div className={`p-4 rounded-xl border ${borderColor} ${bgColor} shadow-sm transition-all duration-300 hover:shadow-md flex flex-col h-full`}>
-      <div className="flex justify-between items-start mb-2">
-        <h3 className="font-bold text-sm text-gray-800 line-clamp-2 min-h-[40px]">{kpi.name}</h3>
-        <Icon className={`w-5 h-5 ${textColor}`} />
+    <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-full group relative overflow-hidden">
+      {/* Subtle top border accent */}
+      <div className={`absolute top-0 left-0 right-0 h-1 ${statusColor} opacity-80`}></div>
+      
+      <div className="flex justify-between items-start mb-4 mt-1">
+        <h3 className="font-bold text-sm text-slate-800 line-clamp-2 leading-relaxed max-w-[80%]">{kpi.name}</h3>
+        <div className={`p-2 rounded-xl ${statusBg} ${textColor}`}>
+          <Icon className="w-4 h-4" />
+        </div>
       </div>
       
-      <div className="flex items-end gap-2 mb-2">
-        <span className="text-2xl font-bold text-gray-900">
-          {kpi.achievementPercentage}%
+      <div className="flex items-baseline gap-1.5 mb-3">
+        <span className="text-3xl font-extrabold text-slate-900 tracking-tight">
+          {kpi.achievementPercentage}
         </span>
-        <span className="text-xs text-gray-500 mb-1">نسبة التحقق</span>
+        <span className="text-sm font-medium text-slate-400">%</span>
       </div>
 
-      <div className="w-full bg-gray-200 rounded-full h-1.5 mb-3">
+      <div className="w-full bg-slate-100 rounded-full h-2 mb-4 overflow-hidden">
         <div 
-          className={`h-1.5 rounded-full ${isCritical ? 'bg-red-500' : isWarning ? 'bg-yellow-500' : 'bg-emerald-500'}`} 
+          className={`h-full rounded-full ${statusColor} transition-all duration-1000 ease-out`} 
           style={{ width: `${Math.min(kpi.achievementPercentage, 100)}%` }}
         ></div>
       </div>
 
-      <div className="flex justify-between text-xs text-gray-600 border-t border-gray-200/50 pt-2 mb-auto">
-        <div className="flex flex-col">
-          <span className="opacity-70">المستهدف</span>
-          <span className="font-semibold">{kpi.target} {kpi.unit}</span>
+      <div className="flex justify-between text-xs text-slate-500 bg-slate-50 p-3 rounded-xl mb-auto">
+        <div className="flex flex-col gap-1">
+          <span className="text-slate-400 font-medium">المستهدف</span>
+          <span className="font-bold text-slate-700">{kpi.target} {kpi.unit}</span>
         </div>
-        <div className="flex flex-col items-end">
-          <span className="opacity-70">الفعلي</span>
-          <span className="font-semibold">{kpi.actual} {kpi.unit}</span>
+        <div className="flex flex-col items-end gap-1">
+          <span className="text-slate-400 font-medium">الفعلي</span>
+          <span className="font-bold text-slate-700">{kpi.actual} {kpi.unit}</span>
         </div>
       </div>
 
       {kpi.responsible && (
-        <div className="mt-3 pt-2 border-t border-gray-200/50 flex items-center gap-1.5 text-xs text-gray-500">
-          <UserCircle2 className="w-3.5 h-3.5 opacity-60" />
-          <span className="opacity-70">المسؤول:</span>
-          {kpi.responsibleEmail ? (
-            <a href={`mailto:${kpi.responsibleEmail}`} className="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline transition-colors">
-              {kpi.responsible}
-            </a>
-          ) : (
-            <span className="font-semibold text-gray-700">{kpi.responsible}</span>
-          )}
+        <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500">
+          <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center">
+            <UserCircle2 className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+          <span className="font-medium text-slate-600">{kpi.responsible}</span>
         </div>
       )}
     </div>
