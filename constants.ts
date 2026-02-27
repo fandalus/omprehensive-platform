@@ -1,4 +1,4 @@
-import { TrackData } from './types';
+import { TrackData, Semester, AppData } from './types';
 
 // Data parsed directly from the user's provided table text.
 export const SCHOOL_DATA: TrackData[] = [
@@ -24,12 +24,12 @@ export const SCHOOL_DATA: TrackData[] = [
     manager: 'شذى الظاهري',
     overallPerformance: 75.69,
     kpis: [
-      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 80, achievementPercentage: 100, unit: '%', responsible: 'هند عسيري' },
-      { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 7.04, achievementPercentage: 50, unit: '#', responsible: 'نوال القحطاني' }, // Note: Data says 50% achievement despite high actual? Likely data quirk or penalty.
-      { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'بشرى الغامدي' },
-      { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 90, achievementPercentage: 100, unit: '%', responsible: 'بشاير البتار' },
-      { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'بشاير البتار' },
-      { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 64, achievementPercentage: 91, unit: '%', responsible: 'نوال القحطاني' },
+      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 80, achievementPercentage: 100, unit: '%', responsible: 'عبد الحميد جابو' },
+      { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 7.04, achievementPercentage: 50, unit: '#', responsible: 'منصور الروقي' }, // Note: Data says 50% achievement despite high actual? Likely data quirk or penalty.
+      { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'رعود اللحياني' },
+      { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 90, achievementPercentage: 100, unit: '%', responsible: 'رعود اللحياني' },
+      { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
+      { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 64, achievementPercentage: 91, unit: '%', responsible: 'سارة السلمي' },
       { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 258200, actual: 31481, achievementPercentage: 12, unit: '$', responsible: '' },
     ]
   },
@@ -39,12 +39,12 @@ export const SCHOOL_DATA: TrackData[] = [
     manager: 'شذى الظاهري',
     overallPerformance: 78.73,
     kpis: [
-      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 83, achievementPercentage: 100, unit: '%', responsible: 'هند عسيري' },
-      { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 5.44, achievementPercentage: 100, unit: '#', responsible: 'صفاء الشماسي - زينب السقاف' },
-      { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'ربى الزهراني' },
-      { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 89, achievementPercentage: 99, unit: '%', responsible: 'سماح الزهراني' },
-      { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'صفاء الشماسي' },
-      { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 44, achievementPercentage: 63, unit: '%', responsible: 'شذى الظاهري' }, // Low
+      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 83, achievementPercentage: 100, unit: '%', responsible: 'عبد الحميد جابو' },
+      { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 5.44, achievementPercentage: 100, unit: '#', responsible: 'منصور الروقي' },
+      { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'رعود اللحياني' },
+      { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 89, achievementPercentage: 99, unit: '%', responsible: 'رعود اللحياني' },
+      { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
+      { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 44, achievementPercentage: 63, unit: '%', responsible: 'سارة السلمي' }, // Low
       { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 258200, actual: 31481, achievementPercentage: 12, unit: '$', responsible: '' },
     ]
   },
@@ -70,13 +70,13 @@ export const SCHOOL_DATA: TrackData[] = [
     manager: 'شذى الظاهري',
     overallPerformance: 58.61, // Lowest
     kpis: [
-      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 75, achievementPercentage: 50, unit: '%', responsible: 'هند عسيري' }, // Data inconsistency in source, utilizing achievement %
-      { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 1.96, achievementPercentage: 61, unit: '#', responsible: 'زينب السقاف' }, // Low
-      { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'بشرى الغامدي' },
-      { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 82, achievementPercentage: 91, unit: '%', responsible: 'عفاف درويش' },
-      { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'بدور الزهراني' },
-      { id: 'awards', name: 'المراكز التنافسية', target: 5, actual: 0, achievementPercentage: 0, unit: '#', responsible: 'عفاف درويش' }, // Critical
-      { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 55, achievementPercentage: 78, unit: '%', responsible: 'زينب السقاف' },
+      { id: 'quran', name: 'إجادة تعلم القرآن الكريم', target: 60, actual: 75, achievementPercentage: 50, unit: '%', responsible: 'عبد الحميد جابو' }, // Data inconsistency in source, utilizing achievement %
+      { id: 'interaction', name: 'تفاعل الطلاب', target: 5.0, actual: 1.96, achievementPercentage: 61, unit: '#', responsible: 'منصور الروقي' }, // Low
+      { id: 'image', name: 'معامل الصورة الذهنية', target: 50, actual: 50, achievementPercentage: 100, unit: '%', responsible: 'رعود اللحياني' },
+      { id: 'parent-sat', name: 'رضا ولي الأمر', target: 90, actual: 82, achievementPercentage: 91, unit: '%', responsible: 'رعود اللحياني' },
+      { id: 'communication', name: 'التواصل الفعال مع ولي الأمر', target: 1.0, actual: 0.89, achievementPercentage: 89, unit: '#', responsible: 'رعود اللحياني' },
+      { id: 'awards', name: 'المراكز التنافسية', target: 5, actual: 0, achievementPercentage: 0, unit: '#', responsible: 'محمد مصطفى' }, // Critical
+      { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 55, achievementPercentage: 78, unit: '%', responsible: 'سارة السلمي' },
       { id: 'activity-revenue', name: 'إيرادات الأنشطة والفعاليات', target: 258200, actual: 31481, achievementPercentage: 12, unit: '$', responsible: '' },
     ]
   }
@@ -96,3 +96,45 @@ export const BRANCH_ADMIN_DATA: TrackData = {
         { id: 'job-env', name: 'جودة بيئة العمل', target: 70, actual: 77, achievementPercentage: 100, unit: '%', responsible: 'سارة السلمي' },
     ]
 }
+
+export const INITIAL_SEMESTERS: Semester[] = [
+  { id: 'term-1-2025', name: 'الفصل الدراسي الأول 1446' },
+  { id: 'term-2-2025', name: 'الفصل الدراسي الثاني 1446' },
+];
+
+// Helper to clone and modify data for demo purposes
+const createMockSemesterData = (baseData: TrackData[], adminData: TrackData, modifier: number): TrackData[] => {
+    const all = [...baseData, adminData];
+    return all.map(track => ({
+        ...track,
+        overallPerformance: parseFloat(Math.min(100, Math.max(0, track.overallPerformance + modifier)).toFixed(2)),
+        kpis: track.kpis.map(kpi => ({
+            ...kpi,
+            actual: kpi.unit === '%' ? Math.min(100, Math.max(0, kpi.actual + modifier)) : kpi.actual,
+            achievementPercentage: Math.min(100, Math.max(0, kpi.achievementPercentage + modifier))
+        }))
+    }));
+};
+
+// Helper to create zeroed data for a new semester
+const createZeroedSemesterData = (baseData: TrackData[], adminData: TrackData): TrackData[] => {
+    const all = [...baseData, adminData];
+    return all.map(track => ({
+        ...track,
+        overallPerformance: 0,
+        kpis: track.kpis.map(kpi => ({
+            ...kpi,
+            actual: 0,
+            achievementPercentage: 0
+        }))
+    }));
+};
+
+export const INITIAL_APP_DATA: AppData = {
+    semesters: INITIAL_SEMESTERS,
+    defaultSemesterId: 'term-1-2025',
+    data: {
+        'term-1-2025': [...SCHOOL_DATA, BRANCH_ADMIN_DATA],
+        'term-2-2025': createZeroedSemesterData(SCHOOL_DATA, BRANCH_ADMIN_DATA),
+    }
+};

@@ -19,6 +19,17 @@ export interface TrackData {
   manager?: string; // Added manager field
 }
 
+export interface Semester {
+  id: string;
+  name: string;
+}
+
+export interface AppData {
+  semesters: Semester[];
+  data: Record<string, TrackData[]>;
+  defaultSemesterId: string;
+}
+
 export interface AnalysisResponse {
   summary: string;
   strengths: string[];

@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { TrackData, KPI } from '../types';
+import { TrackData, KPI, Semester } from '../types';
 import * as XLSX from 'xlsx';
 import { 
   Save, Plus, Trash2, Edit2, Lock, X, LogIn, 
   Search, SortAsc, SortDesc, FileSpreadsheet, Printer, 
   CheckCircle2, AlertTriangle, FileText, Upload, Image as ImageIcon,
-  Eye, EyeOff
+  Eye, EyeOff, CalendarDays
 } from 'lucide-react';
 
 interface AdminPanelProps {
@@ -13,9 +13,15 @@ interface AdminPanelProps {
   onUpdate: (newData: TrackData[]) => void;
   logo: string | null;
   onUpdateLogo: (logo: string | null) => void;
+  semesters: Semester[];
+  defaultSemesterId: string;
+  onUpdateDefaultSemester: (id: string) => void;
 }
 
-const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateLogo }) => {
+const AdminPanel: React.FC<AdminPanelProps> = ({ 
+  data, onUpdate, logo, onUpdateLogo, 
+  semesters, defaultSemesterId, onUpdateDefaultSemester 
+}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   
@@ -247,43 +253,74 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ data, onUpdate, logo, onUpdateL
         </div>
       )}
 
-      {/* General Settings Section (Logo Upload) */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-2 no-print">
-        <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-2">
-            <ImageIcon className="w-5 h-5 text-indigo-600" />
-            تخصيص الهوية
-        </h3>
-        <div className="flex flex-col sm:flex-row items-center gap-6">
-            <div className="w-24 h-24 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative group shrink-0">
-                {logo ? (
-                    <img src={logo} alt="School Logo" className="w-full h-full object-contain p-2" />
-                ) : (
-                    <ImageIcon className="w-8 h-8 text-gray-400" />
-                )}
-            </div>
-            <div className="flex-1 w-full text-center sm:text-right">
-                <label className="block text-sm font-medium text-gray-700 mb-2">شعار المدرسة</label>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-start">
-                    <label className="cursor-pointer bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all shadow-sm">
-                        <Upload className="w-4 h-4" />
-                        <span>رفع صورة جديدة</span>
-                        <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} />
-                    </label>
-                    {logo && (
-                        <button 
-                            onClick={() => {
-                                if(window.confirm('هل أنت متأكد من حذف الشعار؟')) {
-                                    onUpdateLogo(null);
-                                    showNotification('تم حذف الشعار', 'success');
-                                }
-                            }}
-                            className="text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                        >
-                            حذف الشعار
-                        </button>
-                    )}
+      {/* General Settings Section (Logo & Semester) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-2 no-print">
+        {/* Logo Upload */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-2">
+              <ImageIcon className="w-5 h-5 text-indigo-600" />
+              تخصيص الهوية
+          </h3>
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+              <div className="w-24 h-24 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative group shrink-0">
+                  {logo ? (
+                      <img src={logo} alt="School Logo" className="w-full h-full object-contain p-2" />
+                  ) : (
+                      <ImageIcon className="w-8 h-8 text-gray-400" />
+                  )}
+              </div>
+              <div className="flex-1 w-full text-center sm:text-right">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">شعار المدرسة</label>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-start">
+                      <label className="cursor-pointer bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2 text-sm font-medium transition-all shadow-sm">
+                          <Upload className="w-4 h-4" />
+                          <span>رفع صورة جديدة</span>
+                          <input type="file" className="hidden" accept="image/*" onChange={handleLogoUpload} />
+                      </label>
+                      {logo && (
+                          <button 
+                              onClick={() => {
+                                  if(window.confirm('هل أنت متأكد من حذف الشعار؟')) {
+                                      onUpdateLogo(null);
+                                      showNotification('تم حذف الشعار', 'success');
+                                  }
+                              }}
+                              className="text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                          >
+                              حذف الشعار
+                          </button>
+                      )}
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">يفضل استخدام صورة شفافة (PNG) بحجم لا يتجاوز 2MB</p>
+              </div>
+          </div>
+        </div>
+
+        {/* Default Semester Selection */}
+        <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b border-gray-100 pb-2">
+                <CalendarDays className="w-5 h-5 text-indigo-600" />
+                إعدادات الفصل الدراسي
+            </h3>
+            <div className="space-y-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">الفصل الدراسي الافتراضي</label>
+                    <select
+                        value={defaultSemesterId}
+                        onChange={(e) => {
+                            onUpdateDefaultSemester(e.target.value);
+                            showNotification('تم تحديث الفصل الدراسي الافتراضي', 'success');
+                        }}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white text-gray-900"
+                    >
+                        {semesters.map(sem => (
+                            <option key={sem.id} value={sem.id}>{sem.name}</option>
+                        ))}
+                    </select>
+                    <p className="text-xs text-gray-500 mt-2">
+                        هذا هو الفصل الدراسي الذي سيظهر للزوار عند فتح الموقع لأول مرة.
+                    </p>
                 </div>
-                <p className="text-xs text-gray-400 mt-2">يفضل استخدام صورة شفافة (PNG) بحجم لا يتجاوز 2MB</p>
             </div>
         </div>
       </div>

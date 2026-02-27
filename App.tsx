@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SCHOOL_DATA, BRANCH_ADMIN_DATA } from './constants';
+import { SCHOOL_DATA, BRANCH_ADMIN_DATA, INITIAL_APP_DATA } from './constants';
 import KpiCard from './components/KpiCard';
 import AdminPanel from './components/AdminPanel';
-import { TrackData } from './types';
+import { TrackData, AppData } from './types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, CartesianGrid, LabelList } from 'recharts';
 import { LayoutDashboard, Users, PieChart, School, Settings, Clock, CalendarDays, UserCircle } from 'lucide-react';
 
@@ -79,18 +79,35 @@ function App() {
   }, []);
 
   // Initialize data from localStorage or fallback to constants
-  const [schoolData, setSchoolData] = useState<TrackData[]>(() => {
+  const [appData, setAppData] = useState<AppData>(() => {
     try {
-      const saved = localStorage.getItem('andalusSchoolData_v8');
+      const saved = localStorage.getItem('andalusAppData_v2');
       if (saved) {
         return JSON.parse(saved);
+      }
+      // Try to migrate old data (v9) to new structure if v2 doesn't exist
+      const oldData = localStorage.getItem('andalusSchoolData_v9');
+      if (oldData) {
+         const parsedOld = JSON.parse(oldData);
+         return {
+           ...INITIAL_APP_DATA,
+           data: {
+             ...INITIAL_APP_DATA.data,
+             'term-1-2025': parsedOld // Map old data to term 1
+           }
+         };
       }
     } catch (e) {
       console.error("Failed to load data from storage", e);
     }
     // Default fallback
-    return [...SCHOOL_DATA, BRANCH_ADMIN_DATA];
+    return INITIAL_APP_DATA;
   });
+
+  const [selectedSemesterId, setSelectedSemesterId] = useState<string>(appData.defaultSemesterId);
+
+  // Derived schoolData based on selected semester
+  const schoolData = appData.data[selectedSemesterId] || [];
 
   // Initialize Logo from localStorage with the new default
   const [appLogo, setAppLogo] = useState<string | null>(() => {
@@ -119,8 +136,8 @@ function App() {
 
   // Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem('andalusSchoolData_v8', JSON.stringify(schoolData));
-  }, [schoolData]);
+    localStorage.setItem('andalusAppData_v2', JSON.stringify(appData));
+  }, [appData]);
 
   // Helper to update the timestamp
   const refreshLastUpdated = () => {
@@ -135,8 +152,21 @@ function App() {
   };
 
   const handleUpdateData = (newData: TrackData[]) => {
-    setSchoolData(newData);
+    setAppData(prev => ({
+        ...prev,
+        data: {
+            ...prev.data,
+            [selectedSemesterId]: newData
+        }
+    }));
     refreshLastUpdated();
+  };
+
+  const handleUpdateDefaultSemester = (id: string) => {
+      setAppData(prev => ({
+          ...prev,
+          defaultSemesterId: id
+      }));
   };
 
   const handleUpdateLogo = (newLogo: string | null) => {
@@ -207,6 +237,29 @@ function App() {
             
             {/* Desktop Tabs */}
             <div className="hidden md:flex items-center gap-4">
+               {/* Semester Dropdown */}
+               <div className="relative group">
+                   <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 cursor-pointer hover:bg-gray-100 transition-colors">
+                       <CalendarDays className="w-4 h-4 text-indigo-600" />
+                       <select 
+                           value={selectedSemesterId} 
+                           onChange={(e) => {
+                               setSelectedSemesterId(e.target.value);
+                               clearTrackSelection();
+                           }}
+                           className="bg-transparent outline-none cursor-pointer appearance-none pr-6 pl-2"
+                           style={{ backgroundImage: 'none' }}
+                       >
+                           {appData.semesters.map(sem => (
+                               <option key={sem.id} value={sem.id}>{sem.name}</option>
+                           ))}
+                       </select>
+                       <div className="absolute left-3 pointer-events-none">
+                           <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                       </div>
+                   </div>
+               </div>
+
                <button 
                 onClick={() => { setActiveTab('dashboard'); clearTrackSelection(); }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeTab === 'dashboard' ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:text-gray-900'}`}
@@ -223,8 +276,25 @@ function App() {
             </div>
 
             {/* Mobile Admin Button - Discreet */}
-            <div className="md:hidden flex items-center">
-               {/* Removed from navbar to keep it discreet and match screenshot placement */}
+            <div className="md:hidden flex items-center gap-2">
+               {/* Mobile Semester Dropdown */}
+               <div className="relative">
+                   <select 
+                       value={selectedSemesterId} 
+                       onChange={(e) => {
+                           setSelectedSemesterId(e.target.value);
+                           clearTrackSelection();
+                       }}
+                       className="bg-gray-50 border border-gray-200 text-gray-700 text-xs rounded-lg py-1 px-2 pr-6 appearance-none focus:outline-none focus:ring-1 focus:ring-indigo-500 max-w-[140px] truncate"
+                   >
+                       {appData.semesters.map(sem => (
+                           <option key={sem.id} value={sem.id}>{sem.name}</option>
+                       ))}
+                   </select>
+                   <div className="absolute left-1 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                       <svg className="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                   </div>
+               </div>
             </div>
           </div>
         </div>
@@ -270,6 +340,9 @@ function App() {
             onUpdate={handleUpdateData} 
             logo={appLogo}
             onUpdateLogo={handleUpdateLogo}
+            semesters={appData.semesters}
+            defaultSemesterId={appData.defaultSemesterId}
+            onUpdateDefaultSemester={handleUpdateDefaultSemester}
           />
         ) : (
           <div className="space-y-8">
