@@ -81,11 +81,11 @@ function App() {
   // Initialize data from localStorage or fallback to constants
   const [appData, setAppData] = useState<AppData>(() => {
     try {
-      const saved = localStorage.getItem('andalusAppData_v2');
+      const saved = localStorage.getItem('andalusAppData_v3');
       if (saved) {
         return JSON.parse(saved);
       }
-      // Try to migrate old data (v9) to new structure if v2 doesn't exist
+      // Try to migrate old data (v9) to new structure if v3 doesn't exist
       const oldData = localStorage.getItem('andalusSchoolData_v9');
       if (oldData) {
          const parsedOld = JSON.parse(oldData);
@@ -136,7 +136,7 @@ function App() {
 
   // Save to localStorage whenever data changes
   useEffect(() => {
-    localStorage.setItem('andalusAppData_v2', JSON.stringify(appData));
+    localStorage.setItem('andalusAppData_v3', JSON.stringify(appData));
   }, [appData]);
 
   // Helper to update the timestamp

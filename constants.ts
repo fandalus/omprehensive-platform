@@ -98,8 +98,8 @@ export const BRANCH_ADMIN_DATA: TrackData = {
 }
 
 export const INITIAL_SEMESTERS: Semester[] = [
-  { id: 'term-1-2025', name: 'الفصل الدراسي الأول 1446' },
-  { id: 'term-2-2025', name: 'الفصل الدراسي الثاني 1446' },
+  { id: 'term-1-2025', name: 'الفصل الدراسي الأول 1447' },
+  { id: 'term-2-2025', name: 'الفصل الدراسي الثاني 1447' },
 ];
 
 // Helper to clone and modify data for demo purposes
